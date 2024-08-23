@@ -1657,7 +1657,7 @@ public class SieveCoreferenceSystem  {
 
 
   public static void printConllOutputFeatures(Document document, PrintWriter writer, boolean gold) {
-    printConllOutput(document, writer, gold, false);
+    printConllOutputFeatures(document, writer, gold, false);
   }
 
   public static void printConllOutputFeatures(Document document, PrintWriter writer, boolean gold, boolean filterSingletons) {
@@ -1670,7 +1670,7 @@ public class SieveCoreferenceSystem  {
     if (filterSingletons) {
       orderedMentions = filterMentionsWithSingletonClusters(document, orderedMentions);
     }
-    printConllOutput(document, writer, orderedMentions, gold);
+    printConllOutputFeatures(document, writer, orderedMentions, gold);
   }
 
     private static void printConllOutputFeatures(Document document, PrintWriter writer, List<List<Mention>> orderedMentions, boolean gold) {
