@@ -1701,7 +1701,7 @@ public class SieveCoreferenceSystem  {
         sb.append(m.animacy.toString()).append("\n");
         sb.append(m.person.toString()).append("\n");
       }
-      sb.append("\n");
+      // sb.append("\n");
     }
 
     sb.append("#end document").append("\n");
