@@ -23,7 +23,7 @@ public class Constants {
   public static final boolean USE_GOLD_POS = false;
 
   /** if false, use mention prediction */
-  public static final boolean USE_GOLD_MENTIONS = false;
+  public static final boolean USE_GOLD_MENTIONS = true;
 
   /** if true, use given mention boundaries */
   public static final boolean USE_GOLD_MENTION_BOUNDARIES = false;

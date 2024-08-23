@@ -404,10 +404,12 @@ public class SieveCoreferenceSystem  {
     // prepare conll output
     PrintWriter writerGold = null;
     PrintWriter writerPredicted = null;
+    PrintWriter writerFeatures = null;
     PrintWriter writerPredictedCoref = null;
 
     String conllOutputMentionGoldFile = null;
     String conllOutputMentionPredictedFile = null;
+    String conllOutputMentionFeaturesFile = null;
     String conllOutputMentionCorefPredictedFile = null;
     String conllMentionEvalFile = null;
     String conllMentionEvalErrFile = null;
@@ -418,6 +420,7 @@ public class SieveCoreferenceSystem  {
       String conllOutput = props.getProperty(Constants.CONLL_OUTPUT_PROP, "conlloutput");
       conllOutputMentionGoldFile = conllOutput + "-"+timeStamp+".gold.txt";
       conllOutputMentionPredictedFile = conllOutput +"-"+timeStamp+ ".predicted.txt";
+      conllOutputMentionFeaturesFile = conllOutput +"-"+timeStamp+ ".features.txt";
       conllOutputMentionCorefPredictedFile = conllOutput +"-"+timeStamp+ ".coref.predicted.txt";
       conllMentionEvalFile = conllOutput +"-"+timeStamp+ ".eval.txt";
       conllMentionEvalErrFile = conllOutput +"-"+timeStamp+ ".eval.err.txt";
@@ -425,6 +428,7 @@ public class SieveCoreferenceSystem  {
       conllMentionCorefEvalErrFile = conllOutput +"-"+timeStamp+ ".coref.eval.err.txt";
       logger.info("CONLL MENTION GOLD FILE: " + conllOutputMentionGoldFile);
       logger.info("CONLL MENTION PREDICTED FILE: " + conllOutputMentionPredictedFile);
+      logger.info("CONLL MENTION FEATURES FILE: " + conllOutputMentionFeaturesFile);
       logger.info("CONLL MENTION EVAL FILE: " + conllMentionEvalFile);
       if (!Constants.SKIP_COREF) {
         logger.info("CONLL MENTION PREDICTED WITH COREF FILE: " + conllOutputMentionCorefPredictedFile);
@@ -432,6 +436,7 @@ public class SieveCoreferenceSystem  {
       }
       writerGold = new PrintWriter(new FileOutputStream(conllOutputMentionGoldFile));
       writerPredicted = new PrintWriter(new FileOutputStream(conllOutputMentionPredictedFile));
+      writerFeatures = new PrintWriter(new FileOutputStream(conllOutputMentionFeaturesFile));
       writerPredictedCoref = new PrintWriter(new FileOutputStream(conllOutputMentionCorefPredictedFile));
     }
 
@@ -467,6 +472,7 @@ public class SieveCoreferenceSystem  {
         // Not doing coref - print conll output here
         printConllOutput(document, writerGold, true);
         printConllOutput(document, writerPredicted, false);
+        printConllOutputFeatures(document, writerFeatures, false);
       }
 
       // run mention detection only
@@ -1641,6 +1647,66 @@ public class SieveCoreferenceSystem  {
       }
       sb.append("\n");
     }
+
+    sb.append("#end document").append("\n");
+    //    sb.append("#end document ").append(docID).append("\n");
+
+    writer.print(sb.toString());
+    writer.flush();
+  }
+
+
+  public static void printConllOutputFeatures(Document document, PrintWriter writer, boolean gold) {
+    printConllOutput(document, writer, gold, false);
+  }
+
+  public static void printConllOutputFeatures(Document document, PrintWriter writer, boolean gold, boolean filterSingletons) {
+    List<List<Mention>> orderedMentions;
+    if (gold) {
+      orderedMentions = document.goldOrderedMentionsBySentence;
+    } else {
+      orderedMentions = document.predictedOrderedMentionsBySentence;
+    }
+    if (filterSingletons) {
+      orderedMentions = filterMentionsWithSingletonClusters(document, orderedMentions);
+    }
+    printConllOutput(document, writer, orderedMentions, gold);
+  }
+
+  private static void printConllOutputFeatures(Document document, PrintWriter writer, List<List<Mention>> orderedMentions, boolean gold) {
+    Annotation anno = document.annotation;
+    List<List<String[]>> conllDocSentences = document.conllDoc.sentenceWordLists;
+    String docID = anno.get(CoreAnnotations.DocIDAnnotation.class);
+    StringBuilder sb = new StringBuilder();
+    sb.append("#begin document ").append(docID).append("\n");
+    List<CoreMap> sentences = anno.get(CoreAnnotations.SentencesAnnotation.class);
+    for(int sentNum = 0 ; sentNum < sentences.size() ; sentNum++){
+      List<CoreLabel> sentence = sentences.get(sentNum).get(CoreAnnotations.TokensAnnotation.class);
+      List<String[]> conllSentence = conllDocSentences.get(sentNum);
+      Map<Integer,Set<Mention>> mentionBeginOnly = Generics.newHashMap();
+      Map<Integer,Set<Mention>> mentionEndOnly = Generics.newHashMap();
+      Map<Integer,Set<Mention>> mentionBeginEnd = Generics.newHashMap();
+
+      for(int i=0 ; i<sentence.size(); i++){
+        mentionBeginOnly.put(i, new LinkedHashSet<>());
+        mentionEndOnly.put(i, new LinkedHashSet<>());
+        mentionBeginEnd.put(i, new LinkedHashSet<>());
+      }
+
+      // id
+      // gender
+      // animacy
+      // number
+      // person
+
+      for(Mention m : orderedMentions.get(sentNum)) {
+        int corefClusterId = (gold)? m.goldCorefClusterID:m.corefClusterID;
+        sb.append(corefClusterId).append("\n");
+        sb.append(srcMention.gender.toString()).append("\n");
+        sb.append(srcMention.number.toString()).append("\n");
+        sb.append(srcMention.animacy.toString()).append("\n");
+        sb.append(srcMention.person.toString()).append("\n");
+      }
 
     sb.append("#end document").append("\n");
     //    sb.append("#end document ").append(docID).append("\n");
