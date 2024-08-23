@@ -1673,7 +1673,7 @@ public class SieveCoreferenceSystem  {
     printConllOutput(document, writer, orderedMentions, gold);
   }
 
-  private static void printConllOutputFeatures(Document document, PrintWriter writer, List<List<Mention>> orderedMentions, boolean gold) {
+    private static void printConllOutputFeatures(Document document, PrintWriter writer, List<List<Mention>> orderedMentions, boolean gold) {
     Annotation anno = document.annotation;
     List<List<String[]>> conllDocSentences = document.conllDoc.sentenceWordLists;
     String docID = anno.get(CoreAnnotations.DocIDAnnotation.class);
@@ -1687,12 +1687,6 @@ public class SieveCoreferenceSystem  {
       Map<Integer,Set<Mention>> mentionEndOnly = Generics.newHashMap();
       Map<Integer,Set<Mention>> mentionBeginEnd = Generics.newHashMap();
 
-      for(int i=0 ; i<sentence.size(); i++){
-        mentionBeginOnly.put(i, new LinkedHashSet<>());
-        mentionEndOnly.put(i, new LinkedHashSet<>());
-        mentionBeginEnd.put(i, new LinkedHashSet<>());
-      }
-
       // id
       // gender
       // animacy
@@ -1702,11 +1696,13 @@ public class SieveCoreferenceSystem  {
       for(Mention m : orderedMentions.get(sentNum)) {
         int corefClusterId = (gold)? m.goldCorefClusterID:m.corefClusterID;
         sb.append(corefClusterId).append("\n");
-        sb.append(srcMention.gender.toString()).append("\n");
-        sb.append(srcMention.number.toString()).append("\n");
-        sb.append(srcMention.animacy.toString()).append("\n");
-        sb.append(srcMention.person.toString()).append("\n");
+        sb.append(m.gender.toString()).append("\n");
+        sb.append(m.number.toString()).append("\n");
+        sb.append(m.animacy.toString()).append("\n");
+        sb.append(m.person.toString()).append("\n");
       }
+      sb.append("\n");
+    }
 
     sb.append("#end document").append("\n");
     //    sb.append("#end document ").append(docID).append("\n");
