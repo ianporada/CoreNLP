@@ -425,7 +425,7 @@ public class MentionExtractor {
     if (!Constants.USE_GOLD_NE && !replicateCoNLL)  {
       annoSb.append(", ner");
     }
-    if (!Constants.USE_GOLD_PARSES && !replicateCoNLL)  {
+    if (!Constants.USE_GOLD_PARSES) { // DON'T FORCE GOLD PARSES && !replicateCoNLL)  {
       annoSb.append(", parse");
     }
     String annoStr = annoSb.toString();

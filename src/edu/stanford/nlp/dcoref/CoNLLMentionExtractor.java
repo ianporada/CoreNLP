@@ -110,7 +110,7 @@ public class CoNLLMentionExtractor extends MentionExtractor {
     Annotation anno = conllDoc.getAnnotation();
     List<CoreMap> sentences = anno.get(CoreAnnotations.SentencesAnnotation.class);
     for (CoreMap sentence:sentences) {
-      if (!Constants.USE_GOLD_PARSES && !replicateCoNLL) {
+      if (!Constants.USE_GOLD_PARSES ) { // DON'T FORCE GOLD PARSES && !replicateCoNLL) {
         // Remove tree from annotation and replace with parse using stanford parser
         sentence.remove(TreeCoreAnnotations.TreeAnnotation.class);
       } else {
