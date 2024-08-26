@@ -145,7 +145,9 @@ public class CoNLLMentionExtractor extends MentionExtractor {
     }
 
     // Run pipeline
+    // logger.info("RUNNING ANNOTATION PIPELINE!");
     stanfordProcessor.annotate(anno);
+    // logger.info("ANNOTATION PIPELINE FINISHED!");
 
     for (CoreMap sentence:anno.get(CoreAnnotations.SentencesAnnotation.class)) {
       allWords.add(sentence.get(CoreAnnotations.TokensAnnotation.class));

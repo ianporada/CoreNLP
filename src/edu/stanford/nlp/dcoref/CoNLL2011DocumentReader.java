@@ -415,6 +415,7 @@ public class CoNLL2011DocumentReader  {
     {
       String sentText = concatField(sentWords, FIELD_WORD);
       Annotation sentence = new Annotation(sentText);
+
       Tree tree = wordsToParse(sentWords);
       sentence.set(TreeCoreAnnotations.TreeAnnotation.class, tree);
       List<Tree> leaves = tree.getLeaves();
@@ -422,6 +423,7 @@ public class CoNLL2011DocumentReader  {
       assert(leaves.size() == sentWords.size());
       List<CoreLabel> tokens = new ArrayList<>(leaves.size());
       sentence.set(CoreAnnotations.TokensAnnotation.class, tokens);
+
       for (int i = 0; i < sentWords.size(); i++) {
         String[] fields = sentWords.get(i);
         int wordPos = Integer.parseInt(fields[FIELD_WORD_NO]);

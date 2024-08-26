@@ -44,7 +44,7 @@ public class Constants {
   public static final boolean USE_CONLL_AUTO = true;
 
   /** if true, print in conll output format */
-  public static final boolean PRINT_CONLL_OUTPUT = false;
+  public static final boolean PRINT_CONLL_OUTPUT = true;
 
   /** Default path for conll scorer script */
   public static final String conllMentionEvalScript = "/u/nlp/data/coref/conll-2012/scorer/v4/scorer.pl";
@@ -145,6 +145,8 @@ public class Constants {
     else logger.info("USE_GOLD_MENTION_BOUNDARIES off");
     if (Constants.USE_CONLL_AUTO) logger.info("use conll auto set -> if GOLD_NE, GOLD_PARSE, GOLD_POS, etc turned on, use auto");
     else logger.info("use conll gold set -> if GOLD_NE, GOLD_PARSE, GOLD_POS, etc turned on, use gold");
+    if (Constants.PRINT_CONLL_OUTPUT) logger.info("PRINT_CONLL_OUTPUT on");
+    else logger.info("PRINT_CONLL_OUTPUT off");
     if (Constants.REMOVE_SINGLETONS) logger.info("REMOVE_SINGLETONS on");
     else logger.info("REMOVE_SINGLETONS off");
     if (Constants.REMOVE_APPOSITION_PREDICATENOMINATIVES) logger.info("REMOVE_APPOSITION_PREDICATENOMINATIVES on");

@@ -417,6 +417,7 @@ public class SieveCoreferenceSystem  {
     String conllMentionCorefEvalErrFile = null;
 
     if(Constants.PRINT_CONLL_OUTPUT || corefSystem.replicateCoNLL) {
+      logger.info("PRINTING CONLL OUTPUT");
       String conllOutput = props.getProperty(Constants.CONLL_OUTPUT_PROP, "conlloutput");
       conllOutputMentionGoldFile = conllOutput + "-"+timeStamp+".gold.txt";
       conllOutputMentionPredictedFile = conllOutput +"-"+timeStamp+ ".predicted.txt";
