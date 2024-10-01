@@ -428,6 +428,17 @@ public class CoNLL2011DocumentReader  {
         String[] fields = sentWords.get(i);
         int wordPos = Integer.parseInt(fields[FIELD_WORD_NO]);
         assert(wordPos == i);
+        if (i >= leaves.size()) {
+          logger.warning("leaves size: " + leaves.size() + " ; sentWords Size " + sentWords.size() + " ; i: " + i);
+          logger.warning("Leaves: " + leaves.toString());
+          String words_str = "";
+          for (int word_i = 0; word_i < sentWords.size(); word_i++) {
+            String[] current_word = sentWords.get(word_i);
+            words_str += current_word[FIELD_WORD];
+            words_str += " , ";
+          }
+          logger.warning("Words: " + words_str);
+        }   
         Tree leaf = leaves.get(i);
         CoreLabel token = (CoreLabel) leaf.label();
         tokens.add(token);
